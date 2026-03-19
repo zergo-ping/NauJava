@@ -1,0 +1,67 @@
+package ru.Nikita.NauJava.criteria;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.*;
+import org.springframework.stereotype.Repository;
+import ru.Nikita.NauJava.entity.FileAccessLogEntity;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Repository
+public class CustomAccessLogRepositoryImpl implements CustomAccessLogRepository {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    public List<FileAccessLogEntity> findLogsByUserAndDateRange(Long userId,
+                                                                LocalDateTime startDate,
+                                                                LocalDateTime endDate) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<FileAccessLogEntity> query = cb.createQuery(FileAccessLogEntity.class);
+        Root<FileAccessLogEntity> log = query.from(FileAccessLogEntity.class);
+
+        Join<Object, Object> linkJoin = log.join("link");
+        Join<Object, Object> storageJoin = linkJoin.join("storage");
+        Join<Object, Object> userJoin = storageJoin.join("user");
+
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(cb.equal(userJoin.get("id"), userId));
+
+        if (startDate != null && endDate != null) {
+            predicates.add(cb.between(log.get("accessedAt"), startDate, endDate));
+        } else if (startDate != null) {
+            predicates.add(cb.greaterThanOrEqualTo(log.get("accessedAt"), startDate));
+        } else if (endDate != null) {
+            predicates.add(cb.lessThanOrEqualTo(log.get("accessedAt"), endDate));
+        }
+
+        query.where(predicates.toArray(new Predicate[0]));
+
+        query.orderBy(cb.desc(log.get("accessedAt")));
+
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<FileAccessLogEntity> findLogsByIpWithMinCount(String ip, int minCount) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<FileAccessLogEntity> query = cb.createQuery(FileAccessLogEntity.class);
+        Root<FileAccessLogEntity> log = query.from(FileAccessLogEntity.class);
+
+
+        Predicate ipCondition = cb.equal(log.get("accessedByIp"), ip);
+
+
+        query.groupBy(log.get("id"));
+        query.where(ipCondition);
+        query.orderBy(cb.desc(log.get("accessedAt")));
+
+        return entityManager.createQuery(query).getResultList();
+    }
+}
