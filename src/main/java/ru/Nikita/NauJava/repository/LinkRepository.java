@@ -2,6 +2,8 @@ package ru.Nikita.NauJava.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.web.bind.annotation.RestController;
 import ru.Nikita.NauJava.entity.LinkEntity;
 import ru.Nikita.NauJava.entity.StorageEntity;
 import ru.Nikita.NauJava.entity.UserEntity;
@@ -15,6 +17,7 @@ import java.util.Optional;
  * Предоставляет методы для поиска и управления ссылками,
  * используемыми для совместного доступа к файлам.
  */
+@RepositoryRestResource(path = "links")
 public interface LinkRepository extends CrudRepository<LinkEntity, Long> {
 
     /**

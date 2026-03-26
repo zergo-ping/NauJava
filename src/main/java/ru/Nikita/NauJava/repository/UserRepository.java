@@ -1,7 +1,9 @@
 package ru.Nikita.NauJava.repository;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RestController;
 import ru.Nikita.NauJava.entity.UserEntity;
 
 import java.util.Optional;
@@ -11,6 +13,7 @@ import java.util.Optional;
  * 
  * Предоставляет методы для поиска и управления пользователями по критериям
  */
+@RepositoryRestResource(path = "users")
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
