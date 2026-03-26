@@ -14,6 +14,9 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
+/**
+ * Сущность, представляющая пользователя системы.
+ */
 @Entity
 @Table(name = "users")
 @Data

@@ -9,6 +9,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Сущность, представляющая хранилище файлов пользователя.
+ * 
+ * Хранилище содержит файлы и ссылки для доступа к ним.
+ * Каждое хранилище принадлежит конкретному пользователю.
+ */
 @Entity
 @Table(name = "storages")
 @Data

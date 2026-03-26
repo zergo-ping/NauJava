@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Сущность, представляющая ссылку для совместного использования файлов
+ */
 @Entity
 @Table(name = "links")
 @Data
@@ -49,6 +52,14 @@ public class LinkEntity {
 
 
 
+    /**
+     * Проверяет, является ли ссылка действительной
+     * 
+     * Ссылка считается недействительной, если
+     * прошла дата истечения, или достигнут максимальный лимит скачиваний
+     * 
+     * @return true, если ссылка действительна; false в противном случае
+     */
     public boolean isValid() {
         if (expiresAt != null && expiresAt.isBefore(LocalDateTime.now())) return false;
         if (maxDownloads != null && currentDownloads >= maxDownloads) return false;

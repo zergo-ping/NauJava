@@ -9,8 +9,17 @@ import ru.Nikita.NauJava.entity.LinkEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Репозиторий для работы с логами доступа к файлам
+ */
 public interface AccessLogRepository extends CrudRepository<FileAccessLogEntity, Long> {
 
+    /**
+     * Поиск всех логов доступа по ссылке
+     * 
+     * @param link ссылка, к которой был осуществлён доступ
+     * @return список логов доступа для этой ссылки
+     */
     List<FileAccessLogEntity> findByLink(LinkEntity link);
 
 

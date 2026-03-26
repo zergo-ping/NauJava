@@ -5,6 +5,9 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
+/**
+ * Сущность, представляющая файл в хранилище
+ */
 @Entity
 @Table(name = "files")
 @Data

@@ -6,6 +6,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * Сущность, представляющая лог доступа к файлам через ссылку
+ */
 @Entity
 @Table(name = "file_access_log")
 @Data

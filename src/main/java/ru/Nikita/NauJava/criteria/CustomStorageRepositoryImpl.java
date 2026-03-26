@@ -8,12 +8,27 @@ import ru.Nikita.NauJava.entity.StorageEntity;
 
 import java.util.List;
 
+/**
+ * Реализация интерфейса CustomStorageRepository с использованием Criteria API
+ * 
+ * Предоставляет кастомные методы поиска хранилищ через динамическое построение запросов.
+ */
 @Repository
 public class CustomStorageRepositoryImpl implements CustomStorageRepository {
 
+    /**
+     * Entity Manager для работы с JPA и Criteria API.
+     */
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Поиск хранилищ пользователя по MIME-типу с использованием Criteria API
+     * 
+     * @param userId идентификатор пользователя
+     * @param mimeType MIME-тип для фильтрации
+     * @return список хранилищ, отсортированные по дате загрузки в убывающем порядке
+     */
     @Override
     public List<StorageEntity> findStoragesByUserAndMimeType(Long userId, String mimeType) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -32,6 +47,12 @@ public class CustomStorageRepositoryImpl implements CustomStorageRepository {
         return entityManager.createQuery(query).getResultList();
     }
 
+    /**
+     * Поиск хранилищ с минимальным количеством файлов с использованием Criteria API
+     * 
+     * @param minFilesCount минимальное количество файлов
+     * @return список хранилищ, отсортированные по количеству файлов в убывающем порядке
+     */
     @Override
     public List<StorageEntity> findStoragesWithMinFiles(int minFilesCount) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();

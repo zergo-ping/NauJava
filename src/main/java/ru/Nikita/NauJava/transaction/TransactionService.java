@@ -15,6 +15,12 @@ import ru.Nikita.NauJava.repository.UserRepository;
 
 import java.time.LocalDateTime;
 
+/**
+ * Сервис для работы с транзакциями при создании хранилищ и файлов
+ * 
+ * Демонстрирует различные сценарии работы с программными транзакциями,
+ * включая успешные операции, обработку ошибок и откат транзакций
+ */
 @Service
 public class TransactionService {
 
@@ -23,6 +29,14 @@ public class TransactionService {
     private final StorageEntityRepository storageRepository;
     private final FileRepository fileRepository;
 
+    /**
+     * Конструктор сервиса транзакций
+     * 
+     * @param transactionManager менеджер транзакций
+     * @param userRepository репозиторий пользователей
+     * @param storageRepository репозиторий хранилищ
+     * @param fileRepository репозиторий файлов
+     */
     public TransactionService(PlatformTransactionManager transactionManager,
                                      UserRepository userRepository,
                                      StorageEntityRepository storageRepository,
@@ -33,6 +47,14 @@ public class TransactionService {
         this.fileRepository = fileRepository;
     }
 
+    /**
+     * Создаёт новое хранилище для пользователя и добавляет в него файл
+     * При успехе обе операции фиксируются в БД, при ошибке - откатываются
+     * 
+     * @param userId идентификатор пользователя
+     * @param fileName имя файла
+     * @throws RuntimeException если пользователь не найден или произойдёт ошибка при сохранении
+     */
     public void createStorageAndFileSuccess(Long userId, String fileName) {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setName("createStorageAndFileTransaction");
@@ -67,7 +89,14 @@ public class TransactionService {
         }
     }
 
-    //транзакция с ошибкой
+    /**
+     * Демонстрирует откат транзакции при возникновении исключения
+     * Хранилище и файл не будут сохранены в БД
+     * 
+     * @param userId идентификатор пользователя
+     * @param fileName имя файла
+     * @throws RuntimeException всегда выбрасывает исключение для демонстрации отката
+     */
     public void createStorageAndFileWithError(Long userId, String fileName) {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setName("createStorageAndFileWithErrorTransaction");
@@ -93,7 +122,7 @@ public class TransactionService {
             file.setUploadedAt(LocalDateTime.now());
             fileRepository.save(file);
 
-            //  ошибка
+            //  ошибка для демонстрации отката
             int x = 10 / 0;
 
             transactionManager.commit(status);
@@ -104,6 +133,13 @@ public class TransactionService {
         }
     }
 
+    /**
+     * Демонстрирует откат транзакции при попытке работать с несуществующим пользователем
+     * 
+     * @param userId идентификатор пользователя
+     * @param fileName имя файла (не используется)
+     * @throws RuntimeException всегда выбрасывает исключение, так как пользователь не существует
+     */
     public void createStorageWithInvalidUser(Long userId, String fileName) {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setName("createWithInvalidUserTransaction");

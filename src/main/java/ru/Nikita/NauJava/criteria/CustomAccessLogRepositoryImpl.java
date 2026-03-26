@@ -10,12 +10,26 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Реализация интерфейса CustomAccessLogRepository с использованием Criteria API
+ */
 @Repository
 public class CustomAccessLogRepositoryImpl implements CustomAccessLogRepository {
 
+    /**
+     * Entity Manager для работы с JPA и Criteria API
+     */
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Поиск логов доступа по пользователю и диапазону дат с использованием Criteria API
+     * 
+     * @param userId идентификатор пользователя
+     * @param startDate начальная дата (может быть null)
+     * @param endDate конечная дата (может быть null)
+     * @return список логов доступа, отсортированные по дате в убывающем порядке
+     */
     @Override
     public List<FileAccessLogEntity> findLogsByUserAndDateRange(Long userId,
                                                                 LocalDateTime startDate,
@@ -48,6 +62,13 @@ public class CustomAccessLogRepositoryImpl implements CustomAccessLogRepository 
         return entityManager.createQuery(query).getResultList();
     }
 
+    /**
+     * Поиск логов доступа по IP-адресу с использованием Criteria API.
+     * 
+     * @param ip IP-адрес для фильтрации
+     * @param minCount параметр не используется в текущей реализации
+     * @return список логов доступа с указанного IP-адреса
+     */
     @Override
     public List<FileAccessLogEntity> findLogsByIpWithMinCount(String ip, int minCount) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
