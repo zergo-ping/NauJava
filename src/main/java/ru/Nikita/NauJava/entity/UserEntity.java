@@ -2,16 +2,7 @@ package ru.Nikita.NauJava.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.ToString;
-
-
-
 import java.util.ArrayList;
-
-import jakarta.persistence.*;
-
-import lombok.EqualsAndHashCode;
-
 import java.util.List;
 
 /**
@@ -34,6 +25,9 @@ public class UserEntity {
 
     @Column(name = "full_name")
     private String fullName;
+
+    @Column(name = "role", nullable = false)
+    private String role = "USER";
 
     @OneToMany
     private List<StorageEntity> storages = new ArrayList<>();
