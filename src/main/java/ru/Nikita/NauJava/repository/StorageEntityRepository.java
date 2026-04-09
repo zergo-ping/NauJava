@@ -1,7 +1,7 @@
 package ru.Nikita.NauJava.repository;
 
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +15,7 @@ import java.util.List;
  * Репозиторий для работы с хранилищами.
  */
 @RepositoryRestResource(path = "storages")
-public interface StorageEntityRepository extends CrudRepository<StorageEntity, Long> {
+public interface StorageEntityRepository extends JpaRepository<StorageEntity, Long> {
 
     /**
      * Поиск всех хранилищ конкретного пользователя
