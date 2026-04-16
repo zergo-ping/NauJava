@@ -33,6 +33,8 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+
+
     /**
      * Добавить нового пользователя в систему
      * 

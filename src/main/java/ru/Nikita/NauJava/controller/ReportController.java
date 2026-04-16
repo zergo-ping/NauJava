@@ -48,15 +48,15 @@ public class ReportController {
         if (reportEntity.getStatus() == ReportStatus.CREATED) {
             Map<String, Object> response = new HashMap<>();
             response.put("id", reportEntity.getId());
-            response.put("status", reportEntity.getStatus());
+            response.put("status", reportEntity.getStatus().toString());
             response.put("message", "Отчет еще формируется");
             return ResponseEntity.ok(response);
         } else if (reportEntity.getStatus() == ReportStatus.ERROR) {
             Map<String, Object> response = new HashMap<>();
             response.put("id", reportEntity.getId());
-            response.put("status", reportEntity.getStatus());
+            response.put("status", reportEntity.getStatus().toString());
             response.put("message", "Ошибка при формировании отчета");
-            response.put("content", reportEntity.getContent());
+            response.put("content", reportEntity.getContent() != null ? reportEntity.getContent() : "Unknown error");
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.ok()
