@@ -7,9 +7,13 @@ import ru.Nikita.NauJava.repository.ReportRepository;
 import ru.Nikita.NauJava.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.concurrent.ExecutorService;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+
+import static java.util.concurrent.Executors.newFixedThreadPool;
 
 @Service
 public class ReportService {
@@ -37,35 +41,39 @@ public class ReportService {
         CompletableFuture.runAsync(() -> {
             try {
                 long startTime = System.currentTimeMillis();
-                final long[] userCount = new long[1];
-                final long[] usersTime = new long[1];
-                final List<UserEntity>[] users = new List[1];
-                final long[] listTime = new long[1];
 
-                Thread t1 = new Thread(() -> {
-                    long t = System.currentTimeMillis();
-                    userCount[0] = userRepository.count();
-                    usersTime[0] = System.currentTimeMillis() - t;
-                });
+                ExecutorService executor = newFixedThreadPool(2);
+                try {
+                    final long[] usersTime = new long[1];
+                    final long[] listTime = new long[1];
 
-                Thread t2 = new Thread(() -> {
-                    long t = System.currentTimeMillis();
-                    users[0] = (List<UserEntity>) userRepository.findAll();
-                    listTime[0] = System.currentTimeMillis() - t;
-                });
+                    Future<Long> countFuture = executor.submit(() -> {
+                        long time = System.currentTimeMillis();
+                        long count = userRepository.count();
+                        usersTime[0] = System.currentTimeMillis() - time;
+                        return count;
+                    });
 
-                t1.start();
-                t2.start();
-                t1.join();
-                t2.join();
+                    Future<List<UserEntity>> listFuture = executor.submit(() -> {
+                        long t = System.currentTimeMillis();
+                        List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
+                        listTime[0] = System.currentTimeMillis() - t;
+                        return users;
+                    });
 
-                long totalTime = System.currentTimeMillis() - startTime;
-                String html = buildHtmlReport(userCount[0], usersTime[0], users[0], listTime[0], totalTime);
+                    long userCount = countFuture.get();
+                    List<UserEntity> users = listFuture.get();
 
-                ReportEntity report = reportRepository.findById(reportId).orElseThrow();
-                report.setStatus(ReportStatus.COMPLETED);
-                report.setContent(html);
-                reportRepository.save(report);
+                    long totalTime = System.currentTimeMillis() - startTime;
+                    String html = buildHtmlReport(userCount, usersTime[0], users, listTime[0], totalTime);
+
+                    ReportEntity report = reportRepository.findById(reportId).orElseThrow();
+                    report.setStatus(ReportStatus.COMPLETED);
+                    report.setContent(html);
+                    reportRepository.save(report);
+                } finally {
+                    executor.shutdown();
+                }
 
             } catch (Exception e) {
                 ReportEntity report = reportRepository.findById(reportId).orElseThrow();
