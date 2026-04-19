@@ -39,7 +39,7 @@ public interface LinkRepository extends CrudRepository<LinkEntity, Long> {
      * @param user пользователь
      * @return список ссылок, созданных пользователем
      */
-    List<LinkEntity> findByCreatedBy(UserEntity user);
+    List<LinkEntity> findByCreatedAt(UserEntity user);
 
     /**
      * Поиск ссылок в указанном диапазоне дат с минимальным количеством загруженных скачиваний

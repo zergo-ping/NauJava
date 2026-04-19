@@ -2,14 +2,9 @@ package ru.Nikita.NauJava.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Сущность, представляющая ссылку для совместного использования файлов
@@ -27,9 +22,6 @@ public class LinkEntity {
     @JoinColumn(name = "storage_id", nullable = false)
     private StorageEntity storage;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by_user_id", nullable = false)
-    private UserEntity createdBy;
 
     @Column(unique = true, nullable = false)
     private String token;

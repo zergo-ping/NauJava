@@ -22,9 +22,6 @@ public class FileAccessLogEntity {
     @JoinColumn(name = "link_id", nullable = false)
     private LinkEntity link;
 
-    @ManyToOne
-    @JoinColumn(name = "storage_id", nullable = false)
-    private StorageEntity storage;
 
     @Column(name = "accessed_by_ip", columnDefinition = "inet")
     private String accessedByIp;
