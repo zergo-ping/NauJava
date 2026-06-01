@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Загрузка файла — Sharing</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { margin-top: 0; }
+        .nav { margin-bottom: 20px; }
+        .nav a { margin-right: 16px; text-decoration: none; color: #1976d2; }
+        .nav a:hover { text-decoration: underline; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; }
+        input[type="file"], input[type="text"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        .btn-primary { background: #1976d2; color: #fff; }
+        .btn-secondary { background: #e0e0e0; color: #333; text-decoration: none; display: inline-block; margin-left: 8px; }
+        .alert { padding: 12px; border-radius: 4px; margin-bottom: 16px; }
+        .alert-error { background: #ffebee; color: #c62828; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a th:href="@{/home}">Главная</a>
+        <a th:href="@{/files}">Мои файлы</a>
+        <a th:href="@{/links}">Мои ссылки</a>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/custom/users/view/list}">Панель администратора</a>
+        <a th:href="@{/logout}">Выйти</a>
+    </div>
+
+    <h1>Загрузка файла</h1>
+
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <form th:action="@{/files/upload}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="file">Выберите файл</label>
+            <input type="file" id="file" name="file" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Загрузить</button>
+        <a th:href="@{/files}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+</body>
+</html>
