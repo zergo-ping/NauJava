@@ -51,7 +51,6 @@ public class AuthenticationUITest {
      */
     @Test
     public void testSuccessfulLogin() {
-        // Arrange
         loginPage.navigateTo(BASE_URL);
 
         assertThat(loginPage.isLoginPageDisplayed())

@@ -29,12 +29,12 @@ public class UserEntity {
     @Column(name = "role", nullable = false)
     private String role = "USER";
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StorageEntity> storages = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LinkEntity> createdLinks = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private StorageQuotaEntity quota;
 }

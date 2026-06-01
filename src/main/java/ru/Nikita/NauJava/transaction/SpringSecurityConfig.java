@@ -51,22 +51,19 @@ public class SpringSecurityConfig {
         http
             .authenticationManager(authManager)
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/home", "/auth/register", "/auth/login", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/", "/home", "/auth/register", "/auth/login", "/css/**", "/js/**", "/logout").permitAll()
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs").hasRole("ADMIN")
+                .requestMatchers("/links/delete/**", "/links").authenticated()
+                .requestMatchers("/files/**", "/account/profile").authenticated()
                 .requestMatchers("/custom/users/**").authenticated()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .formLogin(form -> form
                 .loginPage("/auth/login")
                 .permitAll()
-                .defaultSuccessUrl("/custom/users/view/list", true)
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .permitAll()
-                .logoutSuccessUrl("/auth/login")
-            )
-            .csrf(csrf -> csrf.disable());
+                .defaultSuccessUrl("/home", true)
+            );
+
         
         return http.build();
     }

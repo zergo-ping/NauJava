@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Сущность, представляющая хранилище файлов пользователя.
  * 
- * Хранилище содержит файлы и ссылки для доступа к ним.
+ * Хранилище содержит файлы пользователя.
  * Каждое хранилище принадлежит конкретному пользователю.
  */
 @Entity
@@ -34,11 +34,6 @@ public class StorageEntity {
     @Column(name = "uploaded_at")
     private LocalDateTime uploadedAt;
 
-    @OneToMany
+    @OneToMany(mappedBy = "storage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FileEntity> files = new ArrayList<>();
-
-    @OneToMany
-    private List<LinkEntity> links = new ArrayList<>();
-
-
 }

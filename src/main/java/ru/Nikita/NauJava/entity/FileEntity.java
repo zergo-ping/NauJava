@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Сущность, представляющая файл в хранилище
@@ -36,5 +38,8 @@ public class FileEntity {
     @CreationTimestamp
     @Column(name = "uploaded_at", updatable = false)
     private LocalDateTime uploadedAt;
+
+    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LinkEntity> links = new ArrayList<>();
 
 }

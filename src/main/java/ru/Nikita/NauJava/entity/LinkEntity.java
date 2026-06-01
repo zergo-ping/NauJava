@@ -24,8 +24,8 @@ public class LinkEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "storage_id", nullable = false)
-    private StorageEntity storage;
+    @JoinColumn(name = "file_id", nullable = false)
+    private FileEntity file;
 
     @ManyToOne
     @JoinColumn(name = "created_by_user_id", nullable = false)

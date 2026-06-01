@@ -46,21 +46,18 @@ public class AuthController {
      */
     @PostMapping("/register")
     public String processRegistration(RegistrationDto registrationDto, Model model) {
-        // Проверить, существует ли уже пользователь с этой почтой
         if (userService.userExists(registrationDto.getEmail())) {
             model.addAttribute("error", "Пользователь с такой почтой уже зарегистрирован");
             model.addAttribute("user", registrationDto);
             return "register";
         }
 
-        // Проверить, совпадают ли пароли
         if (!registrationDto.getPassword().equals(registrationDto.getPasswordConfirm())) {
             model.addAttribute("error", "Пароли не совпадают");
             model.addAttribute("user", registrationDto);
             return "register";
         }
 
-        // Создать нового пользователя
         UserEntity user = new UserEntity();
         user.setEmail(registrationDto.getEmail());
         user.setPasswordHash(registrationDto.getPassword());
@@ -76,8 +73,4 @@ public class AuthController {
             return "register";
         }
     }
-
-
-
-
 }

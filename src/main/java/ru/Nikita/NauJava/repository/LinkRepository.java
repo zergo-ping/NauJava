@@ -1,12 +1,11 @@
 package ru.Nikita.NauJava.repository;
 
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.repository.CrudRepository;
+import ru.Nikita.NauJava.entity.FileEntity;
 import ru.Nikita.NauJava.entity.LinkEntity;
-import ru.Nikita.NauJava.entity.StorageEntity;
 import ru.Nikita.NauJava.entity.UserEntity;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +16,6 @@ import java.util.Optional;
  * Предоставляет методы для поиска и управления ссылками,
  * используемыми для совместного доступа к файлам.
  */
-@RepositoryRestResource(path = "links")
 public interface LinkRepository extends CrudRepository<LinkEntity, Long> {
 
     /**
@@ -29,12 +27,12 @@ public interface LinkRepository extends CrudRepository<LinkEntity, Long> {
     Optional<LinkEntity> findByToken(String token);
 
     /**
-     * Поиск всех ссылок для конкретного хранилища
+     * Поиск всех ссылок для конкретного файла
      * 
-     * @param storage хранилище
-     * @return список ссылок для хранилища
+     * @param file файл
+     * @return список ссылок для файла
      */
-    List<LinkEntity> findByStorage(StorageEntity storage);
+    List<LinkEntity> findByFile(FileEntity file);
 
     /**
      * Поиск всех ссылок, созданных конкретным пользователем
@@ -63,6 +61,6 @@ public interface LinkRepository extends CrudRepository<LinkEntity, Long> {
      * @param userId идентификатор пользователя
      * @return список всех ссылок пользователя
      */
-    @Query("SELECT l FROM LinkEntity l WHERE l.storage.user.id = :userId")
+    @Query("SELECT l FROM LinkEntity l WHERE l.file.storage.user.id = :userId")
     List<LinkEntity> findAllLinksByUserId(Long userId);
 }

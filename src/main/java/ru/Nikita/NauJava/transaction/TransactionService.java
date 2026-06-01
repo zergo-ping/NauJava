@@ -122,7 +122,6 @@ public class TransactionService {
             file.setUploadedAt(LocalDateTime.now());
             fileRepository.save(file);
 
-            //  ошибка для демонстрации отката
             int x = 10 / 0;
 
             transactionManager.commit(status);
